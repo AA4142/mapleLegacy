@@ -1,4 +1,5 @@
 const context = document.querySelector("canvas").getContext("2d");
+
 context.canvas.height = 720;
 context.canvas.width = 1280;
 
