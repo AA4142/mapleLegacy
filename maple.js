@@ -2,7 +2,9 @@ const context = document.querySelector("canvas").getContext("2d");
 context.canvas.height = 720;
 context.canvas.width = 1280;
 
-const playerSprite = document.getElementById("daGoat");
+const playerLeft = document.getElementById("playerLeft");
+
+const playerRight = document.getElementById("playerRight");
 
 context.fillStyle = "blue";
 context.fillRect(0,0, 1280, 720);
@@ -31,6 +33,7 @@ animate();
 const player = {
     height: 64,
     jumping: true,
+    right: false,
     width: 39,
     x: 0,
     xVelocity:0,
@@ -69,10 +72,12 @@ const loop = function(){
 
     if(controller.left){
         player.xVelocity -= 0.4;
+        player.right = false;
     }
 
     if(controller.right){
         player.xVelocity += 0.4;
+        player.right = true;
     }
 
     player.yVelocity += 1;
@@ -98,8 +103,11 @@ const loop = function(){
     context.fillStyle="blue";
     context.fillRect(0, 0, 1280, 720);
 
-    //draw player
-    context.drawImage(playerSprite, player.x, player.y);
+    if(player.right != true){
+        context.drawImage(playerLeft, player.x, player.y);
+    }else{
+        context.drawImage(playerRight, player.x, player.y);
+    }
 
     window.requestAnimationFrame(loop);
 
