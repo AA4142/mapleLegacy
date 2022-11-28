@@ -1,3 +1,6 @@
+//import { playerAnimations } from "./player"; 
+
+
 const context = document.querySelector("canvas").getContext("2d");
 
 context.canvas.height = 720;
@@ -7,29 +10,21 @@ const playerLeft = document.getElementById("playerLeft");
 
 const playerRight = document.getElementById("playerRight");
 
-context.fillStyle = "blue";
-context.fillRect(0,0, 1280, 720);
+const backgroundLayer1 = document.getElementById("backgroundLayer_1");
 
-/*
+const leftWalk2_0 = document.getElementById("leftWalk2_0");
+const leftWalk2_1 = document.getElementById("leftWalk2_1");
+const leftWalk2_2 = document.getElementById("leftWalk2_2");
+const leftWalk2_3 = document.getElementById("leftWalk2_3");
+const leftWalk2_4 = document.getElementById("leftWalk2_4");
 
-let frameX = 0;
-let frameY = 0;
-let gameFrame = 0;
-const staggerFrames = 5;
+const rightWalk2_0 = document.getElementById("rightWalk2_0")
+const rightWalk2_1 = document.getElementById("rightWalk2_1")
+const rightWalk2_2 = document.getElementById("rightWalk2_2")
+const rightWalk2_3 = document.getElementById("rightWalk2_3")
+const rightWalk2_4 = document.getElementById("rightWalk2_4")
 
-function animate(){
-    context.clearRect(0, 0, 1280, 720);
-    context.drawImage(playerSprite, 50, 50);
-    if (gameFrame % staggerFrames == 0){
-
-    }
-
-    gameFrame++;
-    requestAnimationFrame(animate);
-    
-};
-animate();
-*/
+let gameFrame = 1;
 
 const player = {
     height: 64,
@@ -39,7 +34,11 @@ const player = {
     x: 0,
     xVelocity:0,
     y:0,
-    yVelocity: 0
+    yVelocity: 0,
+
+    frames : 4,
+    rightWalk : [rightWalk2_0, rightWalk2_1, rightWalk2_2, rightWalk2_3, rightWalk2_4],
+    leftWalk : [leftWalk2_0, leftWalk2_1, leftWalk2_2, leftWalk2_3, leftWalk2_4]
 }
 
 const controller = {
@@ -66,19 +65,23 @@ const controller = {
 };
 
 const loop = function(){
+
+
+
     if(controller.up && player.jumping == false){
         player.yVelocity -= 15;
         player.jumping = true;
     }
 
     if(controller.left){
-        player.xVelocity -= 0.4;
+        player.xVelocity -= 0.2;
         player.right = false;
     }
 
     if(controller.right){
-        player.xVelocity += 0.4;
+        player.xVelocity += 0.2;
         player.right = true;
+        console.log("right");
     }
 
     player.yVelocity += 1;
@@ -100,24 +103,35 @@ const loop = function(){
         player.x = 1180;
     }
 
+    
+    const staggerFrames = 16;
+
     //draw background
-    context.fillStyle="blue";
-    context.fillRect(0, 0, 1280, 720);
+    context.clearRect(0,0, 1280, 720);
+    let position = Math.floor(gameFrame/staggerFrames) % 5
+
+    context.drawImage(backgroundLayer1 ,0 , -200);
 
     if(player.right != true){
-        context.drawImage(playerLeft, player.x, player.y);
+        context.drawImage(player.leftWalk[position], player.x, player.y);
     }else{
-        context.drawImage(playerRight, player.x, player.y);
+        context.drawImage(player.rightWalk[position], player.x, player.y);
+        
     }
+    context.drawImage(player.rightWalk[position], 100, 100);
 
+
+    gameFrame++;
     window.requestAnimationFrame(loop);
-
-
-
 
 };
 
 window.addEventListener("keydown", controller.keyListener);
 window.addEventListener("keyup", controller.keyListener);
 window.requestAnimationFrame(loop);
+
+
+
+
+
 
